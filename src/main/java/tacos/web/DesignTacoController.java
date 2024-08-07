@@ -11,31 +11,35 @@ import org.springframework.web.bind.annotation.*;
 import tacos.Ingredient;
 import tacos.Taco;
 import tacos.TacoOrder;
+import tacos.data.IngredientRepository;
 import tacos.data.JdbcIngredientRepository;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Slf4j
 @Controller
 @RequestMapping("/design")
 @SessionAttributes("tacoOrder")
+@RequiredArgsConstructor
 public class DesignTacoController {
 
-    private final JdbcIngredientRepository ingredientRepository;
+    private final IngredientRepository ingredientRepository;
 
-    public DesignTacoController(JdbcIngredientRepository ingredientRepository) {
-        this.ingredientRepository = ingredientRepository;
-    }
 
     @ModelAttribute
     public void addIngredientsToModel(Model model) {
 
-        List<Ingredient> ingredients = ingredientRepository.findAll();
+        Iterable<Ingredient> ingredients = ingredientRepository.findAll();
+
+        List<Ingredient> ingredientsList = StreamSupport.stream(ingredients.spliterator(), false)
+                .toList();
+
+
         Ingredient.Type[] types = Ingredient.Type.values();
         for (Ingredient.Type type : types) {
-            model.addAttribute(type.toString().toLowerCase(), filterByType(ingredients, type));
+            model.addAttribute(type.toString().toLowerCase(), filterByType(ingredientsList, type));
         }
     }
 
@@ -72,6 +76,8 @@ public class DesignTacoController {
 
     private Iterable<Ingredient> filterByType(
             List<Ingredient> ingredients, Ingredient.Type type) {
+
+
         return ingredients.stream()
                 .filter(item -> item.getType().equals(type))
                 .collect(Collectors.toList());

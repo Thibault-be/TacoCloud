@@ -10,15 +10,24 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class JdbcIngredientRepository implements IngredientRepository {
+public class JdbcIngredientRepository {
 
-    private JdbcTemplate jdbcTemplate;
+
+    /******************************
+
+     Only required when working with JdbcTemplate. When working with Spring Data, you don't need your own implementation
+
+     *******************************/
+
+
+
+/*    private JdbcTemplate jdbcTemplate;
 
     public JdbcIngredientRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
-    }
+    }*/
 
-    @Override
+   /* @Override
     public List<Ingredient> findAll() {
         return jdbcTemplate.query("select id, name, type from Ingredient", this::mapRowToIngredient);
     }
@@ -52,6 +61,6 @@ public class JdbcIngredientRepository implements IngredientRepository {
         Ingredient.Type type = Ingredient.Type.valueOf(rs.getString("type"));
 
         return new Ingredient(id, name, type);
-    }
+    }*/
 
 }
