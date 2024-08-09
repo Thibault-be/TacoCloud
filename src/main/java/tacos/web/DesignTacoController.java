@@ -2,7 +2,6 @@ package tacos.web;
 
 
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,9 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import tacos.Ingredient;
 import tacos.Taco;
 import tacos.TacoOrder;
-import tacos.data.JdbcIngredientRepository;
+import tacos.data.IngredientRepository;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,16 +22,18 @@ import java.util.stream.Collectors;
 @SessionAttributes("tacoOrder")
 public class DesignTacoController {
 
-    private final JdbcIngredientRepository ingredientRepository;
+    private final IngredientRepository ingredientRepository;
 
-    public DesignTacoController(JdbcIngredientRepository ingredientRepository) {
+    public DesignTacoController(IngredientRepository ingredientRepository) {
         this.ingredientRepository = ingredientRepository;
     }
 
     @ModelAttribute
     public void addIngredientsToModel(Model model) {
 
-        List<Ingredient> ingredients = ingredientRepository.findAll();
+        List<Ingredient> ingredients = new ArrayList<>();
+
+        ingredientRepository.findAll().forEach(ingredients::add);
         Ingredient.Type[] types = Ingredient.Type.values();
         for (Ingredient.Type type : types) {
             model.addAttribute(type.toString().toLowerCase(), filterByType(ingredients, type));
@@ -72,6 +73,7 @@ public class DesignTacoController {
 
     private Iterable<Ingredient> filterByType(
             List<Ingredient> ingredients, Ingredient.Type type) {
+
         return ingredients.stream()
                 .filter(item -> item.getType().equals(type))
                 .collect(Collectors.toList());
