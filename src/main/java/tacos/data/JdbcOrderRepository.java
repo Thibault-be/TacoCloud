@@ -55,9 +55,10 @@ public class JdbcOrderRepository implements OrderRepository {
         jdbcOperations.update(psc, keyHolder);
         long orderId = keyHolder.getKey().longValue();
         order.setId(orderId);
+        System.out.println(orderId);
 
         List<Taco> tacos = order.getTacos();
-        int i = 0;
+        int i = 0; //todo: this maybe should be 1
         for (Taco taco : tacos) {
             saveTaco(orderId, i++, taco);
         }
@@ -104,6 +105,4 @@ public class JdbcOrderRepository implements OrderRepository {
                     ingredient.getId(), tacoId, key++);
         }
     }
-
-
 }
