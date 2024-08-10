@@ -37,3 +37,17 @@ alter table Taco
     add foreign key (taco_order) references Taco_Order(id);
 alter table Ingredient_Ref
     add foreign key (ingredient) references Ingredient(id);
+
+
+
+CREATE TABLE IF NOT EXISTS user_info (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    fullname VARCHAR(255) NOT NULL,
+    street VARCHAR(255),
+    city VARCHAR(255),
+    state VARCHAR(2),
+    zip VARCHAR(10),
+    phone_number VARCHAR(15)
+);
