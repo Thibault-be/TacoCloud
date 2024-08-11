@@ -3,12 +3,14 @@ package tacos.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.SecurityFilterChain;
 import tacos.User;
 import tacos.data.UserRepository;
 
@@ -36,15 +38,29 @@ public class SecurityConfig {
         return new InMemoryUserDetailsManager(userList);
     }*/
 
-    @Bean
-    public UserDetailsService userDetailsService(UserRepository userRepo) {
-        return username -> {
-            User user = userRepo.findUserByUsername(username);
-            if (user != null) return user;
+//    @Bean
+//    public UserDetailsService userDetailsService(UserRepository userRepo) {
+//        return username -> {
+//            User user = userRepo.findUserByUsername(username);
+//            if (user != null) return user;
+//
+//            throw new UsernameNotFoundException("User '" + username + "' not found.");
+//        };
+//    }
 
-            throw new UsernameNotFoundException("User '" + username + "' not found.");
-        };
-    }
+//    @Bean
+//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//        http.authorizeHttpRequests((authorizeHttpRequestCustomizer) -> authorizeHttpRequestCustomizer
+//                .requestMatchers("/design", "/orders").hasRole("USER")
+//                .requestMatchers("/", "/**").permitAll()
+//        );
+//
+//        http.formLogin((formLoginConfigurer) -> formLoginConfigurer.loginPage("/login"));
+//
+//        http.oauth2Login().loginPage("/login");
+//
+//        return http.build();
+//    }
 
 
 }
